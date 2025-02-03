@@ -1,0 +1,87 @@
+<!-- ตัวอย่างที่ 10: การสร้างเกมง่ายๆ -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>เกมคลิกเป้าหมาย</title>
+    <style>
+        #gameArea {
+            width: 300px;
+            height: 300px;
+            border: 1px solid black;
+            position: relative;
+        }
+
+        #target {
+            width: 30px;
+            height: 30px;
+            background-color: red;
+            position: absolute;
+            cursor: pointer;
+            display: none;
+        }
+
+        #startButton {
+            margin-top: 10px;
+            padding: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <h3>เกมคลิกเป้าหมาย</h3>
+    <p>คะแนน: <span id="score">0</span></p>
+    <p id="timer">เวลาที่เหลือ: 30 วินาที</p>
+    <div id="gameArea">
+        <div id="target" onclick="hitTarget()"></div>
+    </div>
+    <button id="startButton" onclick="startGame()">Start</button>
+    <script>
+        let score = 0;
+        let timeLeft = 30;
+        let timerInterval;
+
+        function startGame() {
+            score = 0;
+            timeLeft = 30;
+            document.getElementById("score").textContent = score;
+            document.getElementById("timer").textContent = "เวลาที่เหลือ: " + timeLeft + " วินาที";
+            document.getElementById("startButton").style.display = "none";
+            document.getElementById("target").style.display = "block";
+            moveTarget();
+            
+            timerInterval = setInterval(function () {
+                timeLeft--;
+                document.getElementById("timer").textContent = "เวลาที่เหลือ: " + timeLeft + " วินาที";
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        function hitTarget() {
+            score++;
+            document.getElementById("score").textContent = score;
+            moveTarget();
+        }
+
+        function moveTarget() {
+            let gameArea = document.getElementById("gameArea");
+            let target = document.getElementById("target");
+            let maxX = gameArea.offsetWidth - target.offsetWidth;
+            let maxY = gameArea.offsetHeight - target.offsetHeight;
+            let newX = Math.floor(Math.random() * maxX);
+            let newY = Math.floor(Math.random() * maxY);
+            target.style.left = newX + "px";
+            target.style.top = newY + "px";
+        }
+
+        function endGame() {
+            clearInterval(timerInterval);
+            document.getElementById("timer").textContent = "Game Over!";
+            document.getElementById("startButton").style.display = "block";
+            document.getElementById("target").style.display = "none";
+        }
+    </script>
+</body>
+</html>
